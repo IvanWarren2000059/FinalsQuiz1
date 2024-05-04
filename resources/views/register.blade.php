@@ -11,7 +11,10 @@
 <body>
 
 <div class="container">
+  <div class="d-flex justify-content-between m-2">
   <h1>Register</h1>
+  <a href="{{ route('login') }}" class="btn btn-light d-flex align-items-center">Back</a>
+  </div>
   <form method="POST" action="{{ route('user.store') }}">
     @csrf
     <div class="form-group">

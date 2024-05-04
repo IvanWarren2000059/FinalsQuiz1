@@ -17,7 +17,7 @@ class PostController extends Controller
         $post = new Post();
         $post->title = $request->title;
         $post->body = $request->body;
-        $post->user_id = rand(1, 5);
+        $post->user_id = rand(4, 14);
         $post->save();
         return redirect('/posts');
     }

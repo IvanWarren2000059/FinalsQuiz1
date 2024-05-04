@@ -4,6 +4,11 @@
 
 @section('content')
     <div class="container">
+        <div class="d-flex justify-content-end">
+        <a href="{{ route('posts.create') }}" class="btn btn-primary">Create New Post</a>
+
+        </div>
+
         <table class="table-striped">
             <thead>
                 <tr>
@@ -33,6 +38,5 @@
         </table>
     </div>
 
-    <a href="{{ route('posts.create') }}" class="btn btn-primary">Create New Post</a>
 
 @endsection
