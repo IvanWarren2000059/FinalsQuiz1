@@ -45,7 +45,7 @@
                             <input id="password" type="password" class="form-control" name="password" required autocomplete="current-password">
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary">Login</button>
                         </div>
 
@@ -55,6 +55,11 @@
                             </a>
                         @endif
                     </form>
+
+                    <hr>
+                    <div class="d-flex justify-content-center">
+                        <p>Don't have an account? <a href="{{ route('register') }}">Create an account</a></p>
+                    </div>
                 </div>
             </div>
             <div class="mt-3 text-center">

@@ -2,12 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+
 
 Route::get('/login', function () {
     return view('login');
 })->name('login');
+
+Route::get('/register', function () {
+    return view('register');
+})->name('register');
 
 Route::post('/login', [LoginController::class, 'authenticate']);
 
@@ -16,6 +23,9 @@ Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 Route::get('/', function () {
     return view('login');
 });
+
+Route::post('/register', [UserController::class, 'store'])->name('user.store');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
