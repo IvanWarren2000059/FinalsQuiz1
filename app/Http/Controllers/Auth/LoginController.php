@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -22,13 +21,7 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        // Retrieve the user with the given email
-        $user = DB::table('users')->where('email', $request->email)->first();
-
-        // Check if a user was found and if the password matches
-        if ($user &&$request->password ==$user->password) {
-            // Authentication successful
-            Auth::loginUsingId($user->id); // Log in the user
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->intended(route('posts.index'))->with('success', 'Logged in successfully!');
         }
 
