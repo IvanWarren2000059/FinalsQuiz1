@@ -17,9 +17,16 @@ class AuthenticateUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check()) {
-            // User is not authenticated, redirect to login
-            return redirect()->route('login');
+        if ($request->expectsJson()) {
+            // API request, check Sanctum authentication
+            if (!Auth::guard('sanctum')->check()) {
+                return response()->json(['error' => 'Unauthenticated.'], 401);
+            }
+        } else {
+            // Web request, check session authentication
+            if (!Auth::check()) {
+                return redirect()->route('login');
+            }
         }
 
         return $next($request);

@@ -31,21 +31,19 @@ class LoginController extends Controller
     //         'password' => 'Please double-check your email and password.',
     //     ]);
     // }
-    
     public function authenticate(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        $credentials = $request->only('email', 'password');
+    
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            return response()->json(['user' => $user, 'message' => 'Authenticated successfully']);
+            $token = $user->createToken('YourAppName')->plainTextToken; 
+            return response()->json(['access_token' => $token, 'message' => 'Authenticated successfully']);
         }
-
+    
         return response()->json(['message' => 'The provided credentials do not match our records.'], 401);
     }
+    
 
     
 }
