@@ -14,6 +14,24 @@ class LoginController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // public function authenticate(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|email',
+    //         'password' => 'required',
+    //     ]);
+
+    //     if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+    //         return redirect()->intended(route('posts.index'))->with('success', 'Logged in successfully!');
+    //     }
+
+    //     // Authentication failed
+    //     return back()->withErrors([
+    //         'email' => 'The provided credentials do not match our records.',
+    //         'password' => 'Please double-check your email and password.',
+    //     ]);
+    // }
+    
     public function authenticate(Request $request)
     {
         $request->validate([
@@ -22,13 +40,12 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->intended(route('posts.index'))->with('success', 'Logged in successfully!');
+            $user = Auth::user();
+            return response()->json(['user' => $user, 'message' => 'Authenticated successfully']);
         }
 
-        // Authentication failed
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-            'password' => 'Please double-check your email and password.',
-        ]);
+        return response()->json(['message' => 'The provided credentials do not match our records.'], 401);
     }
+
+    
 }
