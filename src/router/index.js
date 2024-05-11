@@ -1,15 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import ProductList from '@/views/ProductList.vue';
-import AddProduct from '@/views/AddProduct.vue';
+import UserLogin from '@/views/UserLogin.vue';
+import HomeFile from '@/views/HomeFile.vue';
 
 const routes = [
-  { path: '/', component: ProductList },
-  { path: '/add', component: AddProduct },
+  { path: '/', component: UserLogin },
+  { path: '/home', component: HomeFile, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !localStorage.getItem('token')) {
+    next('/');
+  } else {
+    next();
+  }
 });
 
 export default router;
