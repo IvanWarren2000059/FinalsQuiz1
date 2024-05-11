@@ -10,6 +10,7 @@ Route::post('/login', [LoginController::class, 'authenticate']);
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 Route::post('/register', [UserController::class, 'store'])->name('user.store');
+
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
