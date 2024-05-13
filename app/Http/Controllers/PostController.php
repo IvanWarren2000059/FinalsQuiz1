@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -62,16 +63,18 @@ class PostController extends Controller
             'title' => 'required',
             'body' => 'required',
         ]);
-
+    
         $post = new Post();
         $post->title = $request->title;
         $post->body = $request->body;
-        $post->user_id = Auth::id(); 
+        $post->user_id = $request->user_id; // Corrected
         $post->save();
-
+    
         return response()->json(['message' => 'Post created successfully', 'post' => $post], 201);
     }
+    
 
+    
     public function show($id)
     {
         $post = Post::with('user')->findOrFail($id);
@@ -105,5 +108,28 @@ class PostController extends Controller
         $post->delete();
         return response()->json(['message' => 'Post deleted successfully']);
     }
+
+
+    public function isAuthor(Request $request, $id)
+    {
+        // Find the post
+        $post = Post::findOrFail($id);
+
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Check if the user is an admin
+        if ($user->user_Type === 'Admin') {
+            return response()->json(['message' => 'User is an admin'], 200);
+        }
+
+        // Check if the user is the author of the post
+        if ($user->id === $post->user_id) {
+            return response()->json(['message' => 'User is the author of the post'], 200);
+        } else {
+            return response()->json(['message' => 'User is not authorized to edit/delete this post'], 403);
+        }
+    }
+
 
 }
