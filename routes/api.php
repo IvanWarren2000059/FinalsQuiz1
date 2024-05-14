@@ -19,8 +19,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 });
 
-Route::middleware(['auth:sanctum', 'checkPostAuthor'])->group(function () {
-    Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
-    Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
-});
 
