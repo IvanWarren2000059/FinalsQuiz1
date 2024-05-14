@@ -4,50 +4,61 @@
     <form @submit.prevent="registerUser">
       <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" id="name" v-model="name" required>
+        <input type="text" id="name" v-model="name" required />
       </div>
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" v-model="email" required>
+        <input type="email" id="email" v-model="email" required />
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" v-model="password" required>
+        <input type="password" id="password" v-model="password" required />
       </div>
       <button type="submit">Register</button>
     </form>
+
+    <button @click="test">Test</button>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
 
 export default {
   data() {
     return {
-      name: '',
-      email: '',
-      password: ''
+      name: "",
+      email: "",
+      password: "",
     };
   },
   methods: {
     registerUser() {
-      axios.post('http://localhost:8000/api/register', { 
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        user_Type: 'User' 
-      })
-      .then(response => {
-        console.log('User registered:', response.data);
-        this.$router.push('/');
-       
-      })
-      .catch(error => {
-        console.error('Registration failed:', error);
+      axios
+        .post("http://localhost:8000/api/register", {
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          user_Type: "User",
+        })
+        .then((response) => {
+          console.log("User registered:", response.data);
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+
+    test() {
+      toast.success("My toast content", {
+        timeout: 1000,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

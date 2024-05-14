@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100">
+  <div class="h-screen bg-gray-100">
     <div
       class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
     >
@@ -63,7 +63,9 @@
             <button type="submit">
               <Label
                 >Dont have an account?
-                <button class="text-blue-500">Register</button></Label
+                <button class="text-blue-500" @click="redirectToRegister">
+                  Register
+                </button></Label
               >
             </button>
           </div>
@@ -110,35 +112,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-/* Add your login page styles here */
-.login-page {
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-input {
-  display: block;
-  margin-bottom: 10px;
-  padding: 8px;
-  width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.login-btn,
-.register-btn {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 10px 20px;
-}
-
-.login-btn:hover,
-.register-btn:hover {
-  opacity: 0.8;
-}
-</style>
