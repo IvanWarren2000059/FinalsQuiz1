@@ -21,9 +21,9 @@ export default {
   name: "App",
   computed: {
     isLoginRoute() {
-      return this.$route.path === '/login';
-    }
-  }
+      return this.$route.path === "/login";
+    },
+  },
 };
 </script>
 

@@ -59,14 +59,12 @@
             </button>
           </form>
 
-          <div class="flex flex-col items-center justify-between">
-            <button type="submit">
-              <Label
-                >Dont have an account?
-                <button class="text-blue-500" @click="redirectToRegister">
-                  Register
-                </button></Label
-              >
+          <div
+            class="flex items-center justify-center space-x-2 cursor-default"
+          >
+            <p>Dont have an account?</p>
+            <button class="text-blue-500" @click="redirectToRegister">
+              Register here
             </button>
           </div>
         </div>
@@ -104,6 +102,7 @@ export default {
         })
         .catch((error) => {
           console.error("Login failed:", error);
+          console.error("Response data:", error.data);
         });
     },
     redirectToRegister() {
