@@ -28,7 +28,7 @@ class UserController extends Controller
             $request->validate([
                 'name' => 'required|string',
                 'email' => 'required|email|unique:users,email',
-                'password' => 'required|string|min:6',
+                'password' => 'required|string|confirmed|min:6',
             ]);
     
             $user = new User();
@@ -40,7 +40,7 @@ class UserController extends Controller
     
             return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
         } catch (ValidationException $e) {
-            return response()->json(['message' => 'Validation error', 'errors' => $e->validator->getMessageBag()], 422);
+            return response()->json(['message' => 'Validation error', 'error' => $e->errors()], 422);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error occurred while registering user'], 500);
         }
