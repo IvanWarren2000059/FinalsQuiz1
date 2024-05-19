@@ -92,6 +92,14 @@
                 >
                   <v-icon name="md-deleteoutline" scale="1" />
                 </button>
+
+                <button
+                  class="text-gray-500"
+                  @click="someOtherFunction()"
+                  v-else
+                >
+                  <!-- Whatever content you want to display when the condition is false -->
+                </button>
               </div>
 
               <div>
