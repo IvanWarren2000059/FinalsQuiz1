@@ -27,19 +27,33 @@
               <li>
                 <a
                   href="#"
-                  class="block py-2 px-3 text-white rounded md:bg-transparent md:text-blue-500 md:p-0"
+                  class="block py-2 px-3 rounded md:bg-transparent md:p-0"
+                  :class="{ 'text-blue-500': isNewsFeedSelected }"
+                  @click="
+                    fetchPosts();
+                    isNewsFeedSelected = true;
+                    isMyPostsSelected = false;
+                  "
                   >News Feed</a
                 >
               </li>
               <li>
                 <a
                   href="#"
-                  class="font-medium block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-500 md:p-0"
-                  >My Posts</a
+                  class="font-medium block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0"
+                  :class="{ 'text-blue-500': isMyPostsSelected }"
+                  @click="
+                    filterUserPosts();
+                    isMyPostsSelected = true;
+                    isNewsFeedSelected = false;
+                  "
                 >
+                  My Posts
+                </a>
               </li>
             </ul>
           </div>
+
           <button
             class="font-medium text-gray-900 hover:text-red-500"
             @click="logout"
@@ -126,6 +140,10 @@ export default {
     const userId = localStorage.getItem("userId"); // Get user ID from localStorage
     const userType = localStorage.getItem("userType"); // Get user type from localStorage
 
+    // Add these two variables
+    const isNewsFeedSelected = ref(true);
+    const isMyPostsSelected = ref(false);
+
     const editPost = (postId, title, body) => {
       router.push({
         name: "EditPost",
@@ -142,12 +160,22 @@ export default {
           },
         })
         .then((response) => {
-          console.log("Retrieved posts:", response.data.posts);
           posts.value = response.data.posts;
         })
         .catch((error) => {
           console.error("Error fetching posts:", error);
         });
+    };
+
+    const filterUserPosts = () => {
+      if (userType !== "Admin") {
+        const filteredPosts = posts.value.filter(
+          (post) => post.user_id === parseInt(userId)
+        );
+        posts.value = filteredPosts;
+      } else {
+        fetchPosts();
+      }
     };
 
     const deletePost = (postId) => {
@@ -184,13 +212,17 @@ export default {
       posts,
       fetchPosts,
       editPost,
+      filterUserPosts,
       deletePost,
       logout,
       userId,
       userType,
       redirectToCreatePost,
+      isNewsFeedSelected,
+      isMyPostsSelected,
     };
   },
+
   created() {
     this.fetchPosts();
   },
@@ -208,44 +240,5 @@ export default {
   opacity: 0;
   transform: translateY(-100px);
   transition: all 0.3s ease-in-out;
-}
-
-.edit-btn,
-.delete-btn,
-.logout-btn,
-.postcreate-btn {
-  margin-top: 10px;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.edit-btn {
-  background-color: #4caf50;
-  color: white;
-}
-
-.delete-btn {
-  background-color: #f44336;
-  color: white;
-}
-
-.postcreate-btn {
-  background-color: #008cba;
-  color: white;
-}
-
-.logout-btn {
-  background-color: #f44336;
-  color: white;
-  float: right;
-}
-
-.edit-btn:hover,
-.delete-btn:hover,
-.logout-btn:hover,
-.postcreate-btn:hover {
-  opacity: 0.8;
 }
 </style>
