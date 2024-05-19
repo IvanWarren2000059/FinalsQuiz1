@@ -9,7 +9,7 @@
       <div class="m-4 w-[50%] space-y-4">
         <h2 class="text-2xl font-semibold text-gray-600">Edit Post</h2>
 
-        <form @submit.prevent="createPost">
+        <form @submit.prevent="saveChanges">
           <input
             type="text"
             v-model="editedPost.title"

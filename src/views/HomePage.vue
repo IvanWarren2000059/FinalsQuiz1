@@ -102,7 +102,10 @@
 
                 <button
                   class="text-gray-500"
-                  @click="deletePost(post.id)"
+                  @click="
+                    deletePost(post.id);
+                    fetchPosts();
+                  "
                   v-if="
                     parseInt(userId) === post.user_id || userType === 'Admin'
                   "

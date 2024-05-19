@@ -75,9 +75,9 @@
 
 <script>
 import axios from "axios";
-// import { useToast } from "vue-toastification";
+import { useToast } from "vue-toastification";
 
-// const toast = useToast();
+const toast = useToast();
 
 export default {
   name: "LoginPage",
@@ -107,8 +107,8 @@ export default {
           console.log("Success");
         })
         .catch((error) => {
-          console.error("Login failed:", error);
-          console.error("Response data:", error.data);
+          console.error("Login failed:", error.response.data.message);
+          toast.error(error.response.data.message);
         });
     },
     redirectToRegister() {
