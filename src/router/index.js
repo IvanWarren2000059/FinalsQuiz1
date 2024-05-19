@@ -1,16 +1,16 @@
 import { createRouter, createWebHistory } from "vue-router";
-import UserLogin from "@/views/UserLogin.vue";
-import HomeFile from "@/views/HomeFile.vue";
-import EditPost from "../views/EditPost.vue";
-import RegisterPage from "@/views/RegisterAccount.vue";
+import LoginPage from "@/views/LoginPage.vue";
+import HomePage from "@/views/HomePage.vue";
+import EditPage from "../views/EditPage.vue";
+import RegisterPage from "@/views/RegisterPage.vue";
 import CreatePost from "@/views/CreatePost.vue";
 
 const routes = [
-  { path: "/login", component: UserLogin },
-  { path: "/home", component: HomeFile, meta: { requiresAuth: true } },
+  { path: "/login", component: LoginPage },
+  { path: "/home", component: HomePage, meta: { requiresAuth: true } },
   {
     path: "/edit/:id",
-    component: EditPost,
+    component: EditPage,
     name: "EditPost",
     props: true,
     meta: { requiresAuth: true },
