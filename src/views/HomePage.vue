@@ -87,7 +87,7 @@
             :key="post.id"
             class="bg-white mt-4 p-4 rounded-lg shadow-md w-[95%] text-gray-600"
           >
-            <div class="flex flex-col justify-between space-y-2">
+            <div class="flex flex-col justify-between space-y-4">
               <div class="flex flex-row justify-between">
                 <h3 class="text-xl font-bold">{{ post.title }}</h3>
                 <div class="flex flex-row space-x-2 justify-end">
