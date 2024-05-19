@@ -1,7 +1,7 @@
 <template>
-  <div class="w-full h-screen">
-    <div class="w-full bg-white">
-      <nav class="bg-white border-gray-200 dark:bg-gray-900">
+  <div class="w-full h-screen bg-gray-100 space-y-4">
+    <div class="w-full">
+      <nav class="bg-white shadow-md">
         <div
           class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
         >
@@ -15,14 +15,14 @@
               alt="Flowbite Logo"
             />
             <span
-              class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
+              class="self-center text-2xl font-semibold whitespace-nowrap text-gray-600"
               >Forum</span
             >
           </a>
 
           <div class="hidden w-full md:block md:w-auto">
             <ul
-              class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white"
+              class="font-medium flex flex-col p-4 md:p-0 mt-4 border text-gray-600 border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white"
             >
               <li>
                 <a
@@ -55,7 +55,7 @@
           </div>
 
           <button
-            class="font-medium text-gray-900 hover:text-red-500"
+            class="font-medium text-gray-600 hover:text-red-500"
             @click="logout"
           >
             Logout
@@ -65,8 +65,12 @@
     </div>
 
     <div class="max-w-screen-xl mx-auto">
-      <div class="flex justify-between items-center m-4">
-        <h6 class="text-2xl font-semibold">Good day, {{ name }}</h6>
+      <div
+        class="flex justify-between items-center bg-white p-4 rounded-lg shadow-lg"
+      >
+        <h6 class="text-2xl font-semibold text-gray-600">
+          Good day, {{ name }}
+        </h6>
         <button
           class="bg-blue-500 text-white p-3 rounded-full"
           @click="redirectToCreatePost"
@@ -76,59 +80,61 @@
         </button>
       </div>
 
-      <transition-group name="list">
-        <div
-          v-for="post in posts"
-          :key="post.id"
-          class="bg-gray-50 mt-4 p-4 rounded-x"
-        >
-          <div class="flex flex-row justify-between">
-            <div>
-              <h3 class="text-xl font-bold">{{ post.title }}</h3>
-              <p>{{ post.body }}</p>
-            </div>
+      <div class="w-full flex flex-col items-center">
+        <transition-group name="list">
+          <div
+            v-for="post in posts"
+            :key="post.id"
+            class="bg-white mt-4 p-4 rounded-lg shadow-md w-[95%] text-gray-600"
+          >
+            <div class="flex flex-col justify-between space-y-2">
+              <div class="flex flex-row justify-between">
+                <h3 class="text-xl font-bold">{{ post.title }}</h3>
+                <div class="flex flex-row space-x-2 justify-end">
+                  <button
+                    class="text-gray-500"
+                    @click="editPost(post.id, post.title, post.body)"
+                    v-if="
+                      parseInt(userId) === post.user_id || userType === 'Admin'
+                    "
+                  >
+                    <v-icon name="md-modeeditoutline-outlined" scale="1" />
+                  </button>
 
-            <div class="flex flex-col space-y-4">
-              <div class="flex flex-row space-x-2 justify-end">
-                <button
-                  class="text-gray-500"
-                  @click="editPost(post.id, post.title, post.body)"
-                  v-if="
-                    parseInt(userId) === post.user_id || userType === 'Admin'
-                  "
-                >
-                  <v-icon name="md-modeeditoutline-outlined" scale="1" />
-                </button>
+                  <button
+                    class="text-gray-500"
+                    @click="
+                      deletePost(post.id);
+                      fetchPosts();
+                    "
+                    v-if="
+                      parseInt(userId) === post.user_id || userType === 'Admin'
+                    "
+                  >
+                    <v-icon name="md-deleteoutline" scale="1" />
+                  </button>
 
-                <button
-                  class="text-gray-500"
-                  @click="
-                    deletePost(post.id);
-                    fetchPosts();
-                  "
-                  v-if="
-                    parseInt(userId) === post.user_id || userType === 'Admin'
-                  "
-                >
-                  <v-icon name="md-deleteoutline" scale="1" />
-                </button>
-
-                <button
-                  class="text-gray-500"
-                  @click="someOtherFunction()"
-                  v-else
-                >
-                  <!-- Whatever content you want to display when the condition is false -->
-                </button>
+                  <button
+                    class="text-gray-500"
+                    @click="someOtherFunction()"
+                    v-else
+                  >
+                    <!-- Whatever content you want to display when the condition is false -->
+                  </button>
+                </div>
               </div>
 
-              <div>
-                <button class="text-blue-500">Comments</button>
+              <div class="flex flex-col space-y-4">
+                <p>{{ post.body }}</p>
+
+                <div>
+                  <button class="text-blue-500">Comments</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </transition-group>
+        </transition-group>
+      </div>
     </div>
   </div>
 </template>
