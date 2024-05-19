@@ -80,23 +80,26 @@ import axios from "axios";
 // const toast = useToast();
 
 export default {
-  name: "UserLogin",
+  name: "LoginPage",
   data() {
     return {
       email: "",
       password: "",
+      name: "",
     };
   },
   methods: {
     login() {
       axios
         .post("http://localhost:8000/api/login", {
+          name: this.name,
           email: this.email,
           password: this.password,
         })
         .then((response) => {
           console.log("Response data:", response.data); // Log the entire response data
           localStorage.setItem("token", response.data.access_token);
+          localStorage.setItem("name", response.data.name);
           localStorage.setItem("userId", response.data.id);
           localStorage.setItem("userType", response.data.user_Type);
 

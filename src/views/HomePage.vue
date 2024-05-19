@@ -65,13 +65,16 @@
     </div>
 
     <div class="max-w-screen-xl mx-auto">
-      <button
-        class="bg-blue-500 text-white p-3 rounded-full"
-        @click="redirectToCreatePost"
-      >
-        <v-icon name="md-add-round" scale="1" />
-        Create Post
-      </button>
+      <div class="flex justify-between items-center m-4">
+        <h6 class="text-2xl font-semibold">Good day, {{ name }}</h6>
+        <button
+          class="bg-blue-500 text-white p-3 rounded-full"
+          @click="redirectToCreatePost"
+        >
+          <v-icon name="md-add-round" scale="1" />
+          Create Post
+        </button>
+      </div>
 
       <transition-group name="list">
         <div
@@ -137,6 +140,7 @@ export default {
   setup() {
     const posts = ref([]);
     const router = useRouter();
+    const name = localStorage.getItem("name");
     const userId = localStorage.getItem("userId"); // Get user ID from localStorage
     const userType = localStorage.getItem("userType"); // Get user type from localStorage
 
@@ -217,6 +221,7 @@ export default {
       logout,
       userId,
       userType,
+      name,
       redirectToCreatePost,
       isNewsFeedSelected,
       isMyPostsSelected,
