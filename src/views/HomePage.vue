@@ -50,7 +50,44 @@
             :userType="userType"
             @post-deleted="handlePostDeleted"
 
+<<<<<<< HEAD
           />
+=======
+                  <button
+                    class="text-gray-500"
+                    @click="
+                      deletePost(post.id);
+                      fetchPosts();
+                    "
+                    v-if="
+                      parseInt(userId) === post.user_id || userType === 'Admin'
+                    "
+                  >
+                    <v-icon name="md-deleteoutline" scale="1" />
+                  </button>
+
+                  <button
+                    class="text-gray-500"
+                    @click="someOtherFunction()"
+                    v-else
+                  >
+                    <!-- Whatever content you want to display when the condition is false -->
+                  </button>
+                </div>
+              </div>
+
+              <div class="flex flex-col space-y-4">
+                <p>{{ post.body }}</p>
+
+                <div>
+                  <button class="text-blue-500" @click="commentPost">
+                    Comments
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+>>>>>>> 3ba723afaa49efbf36470f7ac3a1844622e8611e
         </transition-group>
       </div>
     </div>
