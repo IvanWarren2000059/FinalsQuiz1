@@ -542,6 +542,7 @@ class ComposerStaticInit6af255e448d9b642c57ac33debef3023
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\AuthenticateUser' => __DIR__ . '/../..' . '/app/Http/Middleware/AuthenticateUser.php',
+        'App\\Http\\Middleware\\CheckPostAuthor' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckPostAuthor.php',
         'App\\Http\\Middleware\\CorsMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/CorsMiddleware.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
         'App\\Http\\Middleware\\PreventRequestsDuringMaintenance' => __DIR__ . '/../..' . '/app/Http/Middleware/PreventRequestsDuringMaintenance.php',
