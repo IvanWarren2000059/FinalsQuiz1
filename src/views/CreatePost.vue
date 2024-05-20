@@ -53,9 +53,7 @@ export default {
             },
           }
         )
-        .then((response) => {
-          console.log("Post created:", response.data.post);
-
+        .then(() => {
           this.$router.push("/home");
         })
         .catch((error) => {

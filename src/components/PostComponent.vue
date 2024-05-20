@@ -1,37 +1,96 @@
 <template>
   <div class="bg-white mt-4 p-4 rounded-lg shadow-md w-[95%] text-gray-600">
     <div class="flex flex-col space-y-4">
-      <h3 class="text-xl font-bold">{{ post.title }}</h3>
-      <p>{{ post.body }}</p>
-      <p><strong>Comments</strong></p>
-      <button v-if="post.comments.length > 3 && !showMoreComments" @click="toggleShowMore" class="ml-4 mt-2 bg-blue-500 text-white px-4 py-2 rounded">Show More</button>
+      <div class="flex flex-row justify-between">
+        <div>
+          <h3 class="text-sm font-medium">{{ post.user_name }}</h3>
 
-      <div v-for="comment in visibleComments" :key="comment.id" class="ml-4">
-        <p><strong>{{ comment.user.name }}</strong>: {{ comment.comment }}</p>
-        <p class="text-gray-500 text-sm">{{ comment.age }}</p>
+          <h3 class="text-xl font-bold">{{ post.title }}</h3>
+        </div>
+
+        <div class="flex flex-row space-x-2 justify-end">
+          <button
+            class="text-gray-500"
+            @click="editPost(post.id, post.title, post.body)"
+            v-if="parseInt(userId) === post.user_id || userType === 'Admin'"
+          >
+            <v-icon name="md-modeeditoutline-outlined" scale="1" />
+          </button>
+          <button
+            class="text-gray-500"
+            @click="
+              deletePost(post.id);
+            "
+            v-if="parseInt(userId) === post.user_id || userType === 'Admin'"
+          >
+            <v-icon name="md-deleteoutline" scale="1" />
+          </button>
+
+          <button class="text-gray-500" v-else>
+            <!-- Whatever content you want to display when the condition is false -->
+          </button>
+        </div>
       </div>
 
-      <textarea v-model="newComment" placeholder="Add a comment" class="ml-4 mt-2 p-2 w-full border rounded"></textarea>
-      <button @click="addComment(post.id)" class="ml-4 mt-2 bg-blue-500 text-white px-4 py-2 rounded">Add Comment</button>
+      <p>{{ post.body }}</p>
+      <hr class="border-gray-300" />
+
+      <div class="flex justify-start">
+        <button
+          v-if="post.comments.length > 3 && !showMoreComments"
+          @click="toggleShowMore"
+          class="text-gray-600 font-medium"
+        >
+          View more comments
+        </button>
+      </div>
+
+      <div v-for="comment in visibleComments" :key="comment.id" class="ml-4">
+        <div class="bg-gray-100 p-2 rounded-lg">
+          <p class="text-gray-900 font-medium">{{ comment.user.name }}</p>
+          <p>{{ comment.comment }}</p>
+        </div>
+
+        <p class="text-gray-500 text-sm ms-2 mt-1">{{ comment.age }}</p>
+      </div>
+
+      <div class="p-4 w-full">
+        <textarea
+          v-model="newComment"
+          placeholder="Add a comment"
+          class="w-full p-4 border rounded"
+        ></textarea>
+
+        <div class="flex justify-end">
+          <button
+            @click="addComment(post.id)"
+            class="text-gray-500 hover:text-blue-500"
+          >
+            <v-icon name="md-send-round" scale="1.5" />
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow } from "date-fns";
 
 export default {
   name: "PostComponent",
   props: {
     post: Object,
     userId: String,
-    userType: String
+    userType: String,
+    editPost: Function,
+    deletePost: Function,
   },
   data() {
     return {
       newComment: "",
-      showMoreComments: false
+      showMoreComments: false,
     };
   },
   computed: {
@@ -40,8 +99,11 @@ export default {
       let commentsToShow = this.post.comments.slice();
 
       // Format comment age based on created_at value
-      commentsToShow.forEach(comment => {
-        const distanceToNow = formatDistanceToNow(new Date(comment.created_at), { addSuffix: true });
+      commentsToShow.forEach((comment) => {
+        const distanceToNow = formatDistanceToNow(
+          new Date(comment.created_at),
+          { addSuffix: true }
+        );
         comment.age = distanceToNow;
       });
 
@@ -51,7 +113,7 @@ export default {
       } else {
         return commentsToShow.slice().reverse().slice(0, 3).reverse();
       }
-    }
+    },
   },
   methods: {
     addComment(postId) {
@@ -59,17 +121,21 @@ export default {
         return;
       }
       axios
-        .post("http://localhost:8000/api/comments", {
-          post_id: postId,
-          comment: this.newComment,
-          user_id: localStorage.getItem("userId"),
-        }, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        .post(
+          "http://localhost:8000/api/comments",
+          {
+            post_id: postId,
+            comment: this.newComment,
             user_id: localStorage.getItem("userId"),
           },
-        })
-        .then(response => {
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              user_id: localStorage.getItem("userId"),
+            },
+          }
+        )
+        .then((response) => {
           // Emit event with the new comment
           this.$emit("comment-added", response.data.comment);
           this.newComment = "";
@@ -79,13 +145,13 @@ export default {
             window.location.reload();
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Error adding comment:", error);
         });
     },
     toggleShowMore() {
       this.showMoreComments = true;
-    }
-  }
+    },
+  },
 };
 </script>
