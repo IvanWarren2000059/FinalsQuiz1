@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Comment;
-<<<<<<< HEAD
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
@@ -34,38 +33,4 @@ public function showComments($postId)
         ->get();
     return response()->json($comments);
 }
-=======
-use Exception;
-
-class CommentController extends Controller
-{
-    public function store(Request $request)
-    {
-
-
-        try {
-
-            $response = Comment::create([
-                'post_id' => $request->post_id,
-                'comment' => $request->comment_body,
-                'user_id' => $request->user()->id
-            ]);
-
-            // Eager load the user relationship
-            $response->load('user');
-
-            return response([
-                "status" => "Success",
-                "response" => $response
-            ]);
-
-
-        } catch (Exception $e) {
-            return response(['message' => $e->getMessage()], 500);
-
-        }
-
-
-    }
->>>>>>> b22ed6f2b4912c22d2366baeb81eb9dfd8f34101
 }

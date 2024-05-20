@@ -54,7 +54,18 @@ class PostController extends Controller
 
     public function index()
     {
-        return response()->json(['posts' => Post::all()]);
+        $posts = Post::with('user')->get()->map(function ($post) {
+            return [
+                'id' => $post->id,
+                'title' => $post->title,
+                'body' => $post->body,
+                'user_id' => $post->user_id,
+                'user_name' => $post->user->name, 
+            ];
+        });
+        
+        return response()->json(['posts' => $posts]);
+        
     }
 
     public function store(Request $request)
@@ -78,7 +89,12 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::with('user')->findOrFail($id);
-        return response()->json(['post' => $post]);
+        $allPosts = Post::with('user')->get();
+        
+        return response()->json([
+            'post' => $posts,
+            'allPosts' => $allPosts,
+        ]);
     }
 
     public function edit($id)
