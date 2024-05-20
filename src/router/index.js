@@ -4,6 +4,7 @@ import HomePage from "@/views/HomePage.vue";
 import EditPage from "../views/EditPage.vue";
 import RegisterPage from "@/views/RegisterPage.vue";
 import CreatePost from "@/views/CreatePost.vue";
+import PostCommentPage from "@/views/PostCommentPage.vue";
 
 const routes = [
   { path: "/login", component: LoginPage },
@@ -17,6 +18,11 @@ const routes = [
   },
   { path: "/register", component: RegisterPage },
   { path: "/createpost", component: CreatePost },
+  {
+    path: "/postcomments",
+    component: PostCommentPage,
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = createRouter({

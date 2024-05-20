@@ -128,7 +128,9 @@
                 <p>{{ post.body }}</p>
 
                 <div>
-                  <button class="text-blue-500">Comments</button>
+                  <button class="text-blue-500" @click="commentPost">
+                    Comments
+                  </button>
                 </div>
               </div>
             </div>
@@ -191,6 +193,12 @@ export default {
       }
     };
 
+    const commentPost = () => {
+      router.push({
+        name: "PostCommentPage",
+      });
+    };
+
     const deletePost = (postId) => {
       axios
         .delete(`http://localhost:8000/api/posts/${postId}`, {
@@ -227,6 +235,7 @@ export default {
       editPost,
       filterUserPosts,
       deletePost,
+      commentPost,
       logout,
       userId,
       userType,
