@@ -35,26 +35,24 @@ export default {
     };
   },
   computed: {
-  visibleComments() {
-    // Sort comments by the latest first
-    let sortedComments = this.post.comments.slice().sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    visibleComments() {
+      // Create a copy of comments to avoid mutating the original data
+      let commentsToShow = this.post.comments.slice();
 
-    // Format comment age based on created_at value
-    sortedComments.forEach(comment => {
-      const distanceToNow = formatDistanceToNow(new Date(comment.created_at), { addSuffix: true });
-      comment.age = distanceToNow;
-    });
+      // Format comment age based on created_at value
+      commentsToShow.forEach(comment => {
+        const distanceToNow = formatDistanceToNow(new Date(comment.created_at), { addSuffix: true });
+        comment.age = distanceToNow;
+      });
 
-    // If showMoreComments is true, reverse the comments list
-    if (this.showMoreComments) {
-      sortedComments = sortedComments.reverse();
+      // If showMoreComments is true, return all comments, else return only the first 3
+      if (this.showMoreComments) {
+        return commentsToShow;
+      } else {
+        return commentsToShow.slice().reverse().slice(0, 3).reverse();
+      }
     }
-
-    // If showMoreComments is true, return all comments, else return only the first 3
-    return this.showMoreComments ? sortedComments : sortedComments.slice(0, 3);
-  }
-},
-
+  },
   methods: {
     addComment(postId) {
       if (!this.newComment.trim()) {
@@ -75,7 +73,11 @@ export default {
           // Emit event with the new comment
           this.$emit("comment-added", response.data.comment);
           this.newComment = "";
-          window.location.reload();
+
+          // If showMoreComments is false, reload the page to maintain sorting order
+          if (!this.showMoreComments) {
+            window.location.reload();
+          }
         })
         .catch(error => {
           console.error("Error adding comment:", error);
