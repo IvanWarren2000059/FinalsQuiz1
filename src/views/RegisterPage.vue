@@ -162,7 +162,7 @@ export default {
             console.error(error);
           } else {
             toast.error("An unexpected error occurred", {
-              timeout: 1000,
+              timeout: 3000,
             });
           }
         });
