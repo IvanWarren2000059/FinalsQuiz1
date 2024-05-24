@@ -1,15 +1,11 @@
 <template>
   <div class="bg-white mt-4 p-4 rounded-lg shadow-md w-[95%] text-gray-600">
-    <!-- Post content -->
     <div class="flex flex-col space-y-4">
-      <!-- Post header -->
       <div class="flex flex-row justify-between">
-        <!-- User info and title -->
         <div>
           <h3 class="text-sm font-medium">{{ post.user_name }}</h3>
           <h3 class="text-xl font-bold">{{ post.title }}</h3>
         </div>
-        <!-- Action buttons -->
         <div class="flex flex-row space-x-2 justify-end">
           <button
             class="text-gray-500"
@@ -30,10 +26,8 @@
           </button>
         </div>
       </div>
-      <!-- Post body -->
       <p>{{ post.body }}</p>
       <hr class="border-gray-300" />
-      <!-- View more comments button -->
       <div class="flex justify-start">
         <button
           v-if="post.comments.length > 3 && !showMoreComments"
@@ -43,9 +37,7 @@
           View more comments
         </button>
       </div>
-      <!-- Comments -->
       <div v-for="comment in visibleComments" :key="comment.id" class="ml-4">
-        <!-- Comment content -->
         <div class="bg-gray-100 p-2 rounded-lg">
           <p class="text-gray-900 font-medium">{{ comment.user.name }}</p>
           <template v-if="!comment.editing">
@@ -58,7 +50,6 @@
             ></textarea>
           </template>
         </div>
-        <!-- Comment actions -->
         <div
           class="flex flex-row space-x-3 content-center text-gray-500 text-sm mt-1 ms-2"
         >
@@ -81,7 +72,7 @@
               v-else
               class="flex flex-row space-x-2 justify-end text-gray-700 cursor-pointer"
             >
-              <p class="hover:text-blue-500" @click="saveChanges(comment)">
+              <p class="hover:text-blue-500" @click="saveComment(comment)">
                 Save Changes
               </p>
               <p class="hover:text-blue-500" @click="cancelEdit(comment)">
@@ -91,7 +82,6 @@
           </div>
         </div>
       </div>
-      <!-- Add comment section -->
       <div class="p-4 w-full">
         <textarea
           v-model="newComment"
@@ -124,6 +114,7 @@ export default {
     editPost: Function,
     deletePost: Function,
   },
+
   data() {
     return {
       newComment: "",
@@ -188,40 +179,22 @@ export default {
     cancelEdit(comment) {
       comment.editing = false;
     },
-    saveChanges(comment) {
-      axios
-        .put(
-          `http://localhost:8000/api/comments/${comment.id}`,
-          { comment: comment.editedComment },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              user_id: localStorage.getItem("userId"),
-            },
-          }
-        )
-        .then((response) => {
+    saveComment(comment) {
+      this.$store
+        .dispatch("saveComment", { comment: comment, post: this.post })
+        .then(() => {
+          // this.$emit("comment-edited", updatedComment);
           comment.editing = false;
-          console.log(response);
         })
         .catch((error) => {
           console.error("Error saving changes:", error);
         });
     },
     deleteComment(comment) {
-      axios
-        .delete(`http://localhost:8000/api/comments/${comment.id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            user_id: localStorage.getItem("userId"),
-          },
-        })
-        .then(() => {
-          this.$emit("comment-deleted", comment.id);
-        })
-        .catch((error) => {
-          console.error("Error deleting comment:", error);
-        });
+      this.$store.dispatch("deleteComment", {
+        comment: comment,
+        post: this.post,
+      });
     },
   },
 };

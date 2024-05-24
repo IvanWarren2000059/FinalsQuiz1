@@ -99,6 +99,7 @@ export default {
   components: {
     PostComponent,
   },
+
   setup() {
     const posts = ref([]);
     const router = useRouter();
@@ -123,8 +124,8 @@ export default {
         .then((response) => {
           posts.value = response.data.posts.map((post) => ({
             ...post,
-            expanded: false, // Initialize expanded property
-            comments: [], // Initialize comments array
+            expanded: false,
+            comments: [],
           }));
 
           // Fetch comments for each post
@@ -145,7 +146,6 @@ export default {
         .then((response) => {
           const postIndex = posts.value.findIndex((post) => post.id === postId);
           if (postIndex !== -1) {
-            // Update comments for the specific post
             posts.value[postIndex].comments = response.data;
           }
         })

@@ -42,10 +42,7 @@ public function showComments($postId)
 
         $comment = Comment::findOrFail($id);
 
-        // Check if the authenticated user is the owner of the comment
-        if ($comment->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        
 
         $comment->comment = $request->comment;
         $comment->save();
@@ -57,10 +54,7 @@ public function showComments($postId)
     {
         $comment = Comment::findOrFail($id);
 
-        // Check if the authenticated user is the owner of the comment
-        if ($comment->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        
 
         $comment->delete();
 
