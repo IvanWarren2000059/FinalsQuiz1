@@ -33,4 +33,37 @@ public function showComments($postId)
         ->get();
     return response()->json($comments);
 }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'comment' => 'required|string',
+        ]);
+
+        $comment = Comment::findOrFail($id);
+
+        // Check if the authenticated user is the owner of the comment
+        if ($comment->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $comment->comment = $request->comment;
+        $comment->save();
+
+        return response()->json(['message' => 'Comment updated successfully', 'comment' => $comment], 200);
+    }
+
+    public function delete($id)
+    {
+        $comment = Comment::findOrFail($id);
+
+        // Check if the authenticated user is the owner of the comment
+        if ($comment->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $comment->delete();
+
+        return response()->json(['message' => 'Comment deleted successfully'], 200);
+    }
 }
